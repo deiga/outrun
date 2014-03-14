@@ -4,6 +4,11 @@ require 'logger'
 
 LOG = Logger.new(STDOUT)
 
+# Builds a directed graph from a given file
+#
+# @param dg [DirectedAdjacencyGraph] The Graph object to populate
+# @param filename [String] The file path to the file to parse
+# @return [Hash] The source of the generated Graph
 def build_directed_graph(dg, filename)
   counter = 0
   source = nil
@@ -15,7 +20,6 @@ def build_directed_graph(dg, filename)
       tmp = Array.new(vertices)
       add_edges(previous_vertices, vertices, dg)
       previous_vertices = Array.new(tmp)
-      vertices = []
     end
   end
   source
@@ -41,7 +45,13 @@ def add_edges(previous_vertices, vertices, dg)
   end
 end
 
-def bellman_ford(dg, source)
+# Calculates the longest path in a DAG with Bellman-Ford -algorith
+# by negative weighted vertices
+#
+# @param dg [DirectedAdjacencyGraph] The Graph to traverse
+# @param source [Hash] The source vertex of the Graph
+# @return [Fixnum] The size of the largest path
+def negative_bellman_ford(dg, source)
   distance = Hash.new { 1.0 / 0.0 }
   predecessor = {}
   distance[source] = source.values.first.to_i
@@ -76,6 +86,12 @@ def detect_negative_weight_cycle(edges, distance)
   end
 end
 
+# Calculates the longest path in a DAG by toposorting
+# and then traversing adjacent vertices, using negative weighted vertices
+#
+# @param source [Hash] The source vertex of the Graph
+# @param dg [DirectedAdjacencyGraph] The Graph to traverse
+# @return [Fixnum] The size of the largest path
 def longest_path(source, dg)
   distance = Hash.new(Float::INFINITY)
   distance[source] = source.values.first.to_i
@@ -102,24 +118,23 @@ def find_longer_distance_in_neighbours(adjacent_vertices, distance, v)
   end
 end
 
+# dg = RGL::DirectedAdjacencyGraph.new
+# source = build_directed_graph(dg, 'tree1.txt')
+# bf = negative_bellman_ford(dg, source)
+# lp = longest_path(source, dg)
+# LOG.info "Longest path for 'Tree 1': bf: #{bf} - lp: #{lp}"
 
-dg = RGL::DirectedAdjacencyGraph.new
-source = build_directed_graph(dg, 'tree1.txt')
-bf = bellman_ford(dg, source)
-lp = longest_path(source, dg)
-LOG.info "Longest path for 'Tree 1': bf: #{bf} - lp: #{lp}"
+# dg = RGL::DirectedAdjacencyGraph.new
+# source = build_directed_graph(dg, 'tree2.txt')
+# bf = negative_bellman_ford(dg, source)
+# lp = longest_path(source, dg)
+# LOG.info "Longest path for 'Tree 2': bf: #{bf} - lp: #{lp}"
 
-dg = RGL::DirectedAdjacencyGraph.new
-source = build_directed_graph(dg, 'tree2.txt')
-bf = bellman_ford(dg, source)
-lp = longest_path(source, dg)
-LOG.info "Longest path for 'Tree 2': bf: #{bf} - lp: #{lp}"
-
-dg = RGL::DirectedAdjacencyGraph.new
-source = build_directed_graph(dg, 'tree3.txt')
-bf = bellman_ford(dg, source)
-lp = longest_path(source, dg)
-LOG.info "Longest path for 'Tree 4': bf: #{bf} - lp: #{lp}"
+# dg = RGL::DirectedAdjacencyGraph.new
+# source = build_directed_graph(dg, 'tree3.txt')
+# bf = negative_bellman_ford(dg, source)
+# lp = longest_path(source, dg)
+# LOG.info "Longest path for 'Tree 4': bf: #{bf} - lp: #{lp}"
 
 dg = RGL::DirectedAdjacencyGraph.new
 source = build_directed_graph(dg, 'tree.txt')
