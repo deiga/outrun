@@ -59,18 +59,30 @@ end
 def longest_path(source, dg)
   distance = Hash.new { 1.0 / 0.0 }
   distance[source] = source.values.first.to_i
-  dg.vertices.each do |v|
-    if distance[v] != Float::INFINITY
-      dg.adjacent_vertices(v).each do |av|
-        w = av.values.first.to_i
-        new_dist = distance[v] + w
-        if distance[av] > new_dist
-          distance[av] = new_dist
-        end
-      end
-    end
-  end
+  traverse_vertices(dg.vertices, distance, dg)
   -distance.to_a.min_by {|k,v| v}.last
+end
+
+def traverse_vertices(vertices, distance, dg)
+  unless vertices.empty?
+    v = vertices.shift
+    if distance[v] != Float::INFINITY
+      find_longer_distance_in_neighbours(dg.adjacent_vertices(v), distance, v)
+    end
+    traverse_vertices(vertices, distance, dg)
+  end
+end
+
+def find_longer_distance_in_neighbours(adjacent_vertices, distance, v)
+  unless adjacent_vertices.empty?
+    av = adjacent_vertices.shift
+    w = av.values.first.to_i
+    new_dist = distance[v] + w
+    if distance[av] > new_dist
+      distance[av] = new_dist
+    end
+    find_longer_distance_in_neighbours(adjacent_vertices, distance, v)
+  end
 end
 
 # dg = RGL::DirectedAdjacencyGraph.new
