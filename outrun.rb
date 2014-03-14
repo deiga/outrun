@@ -1,5 +1,8 @@
 require 'priority_queue'
 require 'rgl/adjacency'
+require 'logger'
+
+LOG = Logger.new(STDOUT)
 
 def build_tree(dg, filename)
   counter = 0
@@ -51,7 +54,7 @@ def bellman_ford(vertices, edges, source)
     v = e.target
     w = v.values.first.to_i
     if distance[u] + w < distance[v]
-      p 'ERROR: Graph contains a negative-weight cycle'
+      LOG.error 'Graph contains a negative-weight cycle'
     end
   end
   -distance.to_a.min_by { |k, v| v }.last
@@ -83,30 +86,37 @@ def find_longer_distance_in_neighbours(adjacent_vertices, distance, v)
   end
 end
 
+
 # dg = RGL::DirectedAdjacencyGraph.new
 # source = build_tree(dg, 'tree1.txt')
-# p 'Tree 1:', bellman_ford(dg.vertices, dg.edges, source), longest_path(source, dg)
+# bf = bellman_ford(dg.vertices, dg.edges, source)
+# lp = longest_path(source, dg)
+# LOG.info "Longest path for 'Tree 1': bf: #{bf} - lp: #{lp}"
 
 # dg = RGL::DirectedAdjacencyGraph.new
 # source = build_tree(dg, 'tree2.txt')
-# p 'Tree 2:', bellman_ford(dg.vertices, dg.edges, source), longest_path(source, dg)
+# bf = bellman_ford(dg.vertices, dg.edges, source)
+# lp = longest_path(source, dg)
+# LOG.info "Longest path for 'Tree 2': bf: #{bf} - lp: #{lp}"
 
 # dg = RGL::DirectedAdjacencyGraph.new
 # source = build_tree(dg, 'tree3.txt')
-# p 'Tree 3:', bellman_ford(dg.vertices, dg.edges, source), longest_path(source, dg)
+# bf = bellman_ford(dg.vertices, dg.edges, source)
+# lp = longest_path(source, dg)
+# LOG.info "Longest path for 'Tree 4': bf: #{bf} - lp: #{lp}"
 
 dg = RGL::DirectedAdjacencyGraph.new
 source = build_tree(dg, 'tree.txt')
 start = Time.now
-tslp = longest_path(source, dg)
+lp = longest_path(source, dg)
 finish = Time.now
-p finish - start
-p 'Tree:', tslp
+LOG.info "Time: #{finish - start}"
+LOG.info "Longest path for 'Tree': #{lp}"
 
 # dg = RGL::DirectedAdjacencyGraph.new
 # source = build_tree(dg, 'triangle.txt')
 # start = Time.now
-# tslp = longest_path(source, dg)
+# lp = longest_path(source, dg)
 # finish = Time.now
-# p finish - start
-# p 'Triangle:', tslp
+# LOG.info "Time: #{finish - start}"
+# LOG.info "Longest path for 'Triangle': #{lp}"
