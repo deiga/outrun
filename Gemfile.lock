@@ -1,0 +1,16 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    PriorityQueue (0.1.2)
+    rake (10.1.1)
+    rgl (0.4.0)
+      rake
+      stream (>= 0.5)
+    stream (0.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  PriorityQueue
+  rgl
