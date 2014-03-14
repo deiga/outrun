@@ -57,7 +57,7 @@ def bellman_ford(vertices, edges, source)
 end
 
 def longest_path(source, dg)
-  distance = Hash.new { 1.0 / 0.0 }
+  distance = Hash.new(Float::INFINITY)
   distance[source] = source.values.first.to_i
   traverse_vertices(dg.vertices, distance, dg)
   -distance.to_a.min_by {|k,v| v}.last
