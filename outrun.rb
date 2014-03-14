@@ -4,27 +4,16 @@ require 'logger'
 
 LOG = Logger.new(STDOUT)
 
-def build_tree(dg, filename)
+def build_directed_graph(dg, filename)
   counter = 0
   source = nil
   File.open(filename, 'r') do |f|
     previous_vertices = []
-    vertices = []
     f.each_line do |line|
       next if line.strip.start_with?('#')
-      line.split(' ').each do |node|
-        node = - node.to_i
-        vertex_label = { counter => node }
-        dg.add_vertex(vertex_label)
-        vertices << vertex_label
-        source = {counter => node} if previous_vertices.empty?
-        counter += 1
-      end
+      vertices, source, counter = handle_line(line, counter, source,  dg, previous_vertices.empty?)
       tmp = Array.new(vertices)
-      previous_vertices.each do |pv|
-        dg.add_edge(pv, vertices.shift)
-        dg.add_edge(pv, vertices.first)
-      end
+      add_edges(previous_vertices, vertices, dg)
       previous_vertices = Array.new(tmp)
       vertices = []
     end
@@ -32,13 +21,39 @@ def build_tree(dg, filename)
   source
 end
 
-def bellman_ford(vertices, edges, source)
+def handle_line(line, counter, source, dg, previous_vertices_empty)
+  vertices = []
+  line.split(' ').each do |node|
+    node = - node.to_i
+    vertex_label = { counter => node }
+    dg.add_vertex(vertex_label)
+    vertices << vertex_label
+    source = vertex_label if previous_vertices_empty
+    counter += 1
+  end
+  [vertices, source, counter]
+end
+
+def add_edges(previous_vertices, vertices, dg)
+  previous_vertices.each do |pv|
+    dg.add_edge(pv, vertices.shift)
+    dg.add_edge(pv, vertices.first)
+  end
+end
+
+def bellman_ford(dg, source)
   distance = Hash.new { 1.0 / 0.0 }
   predecessor = {}
   distance[source] = source.values.first.to_i
 
-  vertices.each do
-    edges.each do |e|
+  bf_traverse_vertices(dg, distance, predecessor)
+  detect_negative_weight_cycle(dg.edges, distance)
+  -distance.to_a.min_by { |k, v| v }.last
+end
+
+def bf_traverse_vertices(dg, distance, predecessor)
+  dg.vertices.each do
+    dg.edges.each do |e|
       u = e.source
       v = e.target
       w = v.values.first.to_i
@@ -48,7 +63,9 @@ def bellman_ford(vertices, edges, source)
       end
     end
   end
+end
 
+def detect_negative_weight_cycle(edges, distance)
   edges.each do |e|
     u = e.source
     v = e.target
@@ -57,7 +74,6 @@ def bellman_ford(vertices, edges, source)
       LOG.error 'Graph contains a negative-weight cycle'
     end
   end
-  -distance.to_a.min_by { |k, v| v }.last
 end
 
 def longest_path(source, dg)
@@ -87,26 +103,26 @@ def find_longer_distance_in_neighbours(adjacent_vertices, distance, v)
 end
 
 
-# dg = RGL::DirectedAdjacencyGraph.new
-# source = build_tree(dg, 'tree1.txt')
-# bf = bellman_ford(dg.vertices, dg.edges, source)
-# lp = longest_path(source, dg)
-# LOG.info "Longest path for 'Tree 1': bf: #{bf} - lp: #{lp}"
-
-# dg = RGL::DirectedAdjacencyGraph.new
-# source = build_tree(dg, 'tree2.txt')
-# bf = bellman_ford(dg.vertices, dg.edges, source)
-# lp = longest_path(source, dg)
-# LOG.info "Longest path for 'Tree 2': bf: #{bf} - lp: #{lp}"
-
-# dg = RGL::DirectedAdjacencyGraph.new
-# source = build_tree(dg, 'tree3.txt')
-# bf = bellman_ford(dg.vertices, dg.edges, source)
-# lp = longest_path(source, dg)
-# LOG.info "Longest path for 'Tree 4': bf: #{bf} - lp: #{lp}"
+dg = RGL::DirectedAdjacencyGraph.new
+source = build_directed_graph(dg, 'tree1.txt')
+bf = bellman_ford(dg, source)
+lp = longest_path(source, dg)
+LOG.info "Longest path for 'Tree 1': bf: #{bf} - lp: #{lp}"
 
 dg = RGL::DirectedAdjacencyGraph.new
-source = build_tree(dg, 'tree.txt')
+source = build_directed_graph(dg, 'tree2.txt')
+bf = bellman_ford(dg, source)
+lp = longest_path(source, dg)
+LOG.info "Longest path for 'Tree 2': bf: #{bf} - lp: #{lp}"
+
+dg = RGL::DirectedAdjacencyGraph.new
+source = build_directed_graph(dg, 'tree3.txt')
+bf = bellman_ford(dg, source)
+lp = longest_path(source, dg)
+LOG.info "Longest path for 'Tree 4': bf: #{bf} - lp: #{lp}"
+
+dg = RGL::DirectedAdjacencyGraph.new
+source = build_directed_graph(dg, 'tree.txt')
 start = Time.now
 lp = longest_path(source, dg)
 finish = Time.now
@@ -114,7 +130,7 @@ LOG.info "Time: #{finish - start}"
 LOG.info "Longest path for 'Tree': #{lp}"
 
 # dg = RGL::DirectedAdjacencyGraph.new
-# source = build_tree(dg, 'triangle.txt')
+# source = build_directed_graph(dg, 'triangle.txt')
 # start = Time.now
 # lp = longest_path(source, dg)
 # finish = Time.now
