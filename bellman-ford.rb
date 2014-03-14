@@ -56,14 +56,48 @@ def bellman_ford(vertices, edges, source)
   -distance.to_a.min_by {|k,v| v}.last
 end
 
-dg = RGL::DirectedAdjacencyGraph.new
-source = build_tree(dg, 'tree1.txt')
-p 'Tree 1:', bellman_ford(dg.vertices, dg.edges, source)
+def longest_path(source, dg)
+  distance = Hash.new { 1.0 / 0.0 }
+  distance[source] = source.values.first.to_i
+  dg.vertices.each do |v|
+    if distance[v] != Float::INFINITY
+      dg.adjacent_vertices(v).each do |av|
+        w = av.values.first.to_i
+        new_dist = distance[v] + w
+        if distance[av] > new_dist
+          distance[av] = new_dist
+        end
+      end
+    end
+  end
+  -distance.to_a.min_by {|k,v| v}.last
+end
 
-dg = RGL::DirectedAdjacencyGraph.new
-source = build_tree(dg, 'tree2.txt')
-p 'Tree 2:', bellman_ford(dg.vertices, dg.edges, source)
+# dg = RGL::DirectedAdjacencyGraph.new
+# source = build_tree(dg, 'tree1.txt')
+# p 'Tree 1:', bellman_ford(dg.vertices, dg.edges, source), longest_path(source, dg)
+
+# dg = RGL::DirectedAdjacencyGraph.new
+# source = build_tree(dg, 'tree2.txt')
+# p 'Tree 2:', bellman_ford(dg.vertices, dg.edges, source), longest_path(source, dg)
+
+# dg = RGL::DirectedAdjacencyGraph.new
+# source = build_tree(dg, 'tree3.txt')
+# p 'Tree 3:', bellman_ford(dg.vertices, dg.edges, source), longest_path(source, dg)
 
 dg = RGL::DirectedAdjacencyGraph.new
 source = build_tree(dg, 'tree.txt')
-p 'Tree:',  bellman_ford(dg.vertices, dg.edges, source)
+start = Time.now
+tslp = longest_path(source, dg)
+finish = Time.now
+p finish - start
+p 'Tree:', tslp
+
+# dg = RGL::DirectedAdjacencyGraph.new
+# source = build_tree(dg, 'triangle.txt')
+# start = Time.now
+# tslp = longest_path(source, dg)
+# finish = Time.now
+# p finish - start
+# p 'Triangle:', tslp
+
