@@ -11,8 +11,9 @@ def build_tree(dg, filename)
       next if line.strip.start_with?('#')
       line.split(' ').each do |node|
         node = - node.to_i
-        dg.add_vertex({counter=>node})
-        vertices << {counter=>node}
+        vertex_label = { counter => node }
+        dg.add_vertex(vertex_label)
+        vertices << vertex_label
         source = {counter => node} if previous_vertices.empty?
         counter += 1
       end
@@ -50,17 +51,17 @@ def bellman_ford(vertices, edges, source)
     v = e.target
     w = v.values.first.to_i
     if distance[u] + w < distance[v]
-      p "ERROR: Graph contains a negative-weight cycle"
+      p 'ERROR: Graph contains a negative-weight cycle'
     end
   end
-  -distance.to_a.min_by {|k,v| v}.last
+  -distance.to_a.min_by { |k, v| v }.last
 end
 
 def longest_path(source, dg)
   distance = Hash.new(Float::INFINITY)
   distance[source] = source.values.first.to_i
   traverse_vertices(dg.vertices, distance, dg)
-  -distance.to_a.min_by {|k,v| v}.last
+  -distance.to_a.min_by { |k, v| v }.last
 end
 
 def traverse_vertices(vertices, distance, dg)
@@ -76,11 +77,8 @@ end
 def find_longer_distance_in_neighbours(adjacent_vertices, distance, v)
   unless adjacent_vertices.empty?
     av = adjacent_vertices.shift
-    w = av.values.first.to_i
-    new_dist = distance[v] + w
-    if distance[av] > new_dist
-      distance[av] = new_dist
-    end
+    new_dist = distance[v] + av.values.first.to_i
+    distance[av] = new_dist if distance[av] > new_dist
     find_longer_distance_in_neighbours(adjacent_vertices, distance, v)
   end
 end
@@ -112,4 +110,3 @@ p 'Tree:', tslp
 # finish = Time.now
 # p finish - start
 # p 'Triangle:', tslp
-
