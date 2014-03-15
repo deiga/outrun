@@ -96,7 +96,7 @@ def longest_path(source, dg)
   distance = Hash.new(Float::INFINITY)
   distance[source] = source.values.first.to_i
   traverse_vertices(dg.vertices, distance, dg)
-  -distance.to_a.min_by { |k, v| v }.last
+  distance.to_a.min_by { |k, v| v }
 end
 
 def traverse_vertices(vertices, distance, dg)
@@ -134,7 +134,7 @@ dg = RGL::DirectedAdjacencyGraph.new
 source = build_directed_graph(dg, 'tree3.txt')
 bf = negative_bellman_ford(dg, source)
 lp = longest_path(source, dg)
-LOG.info "Longest path for 'Tree 4': bf: #{bf} - lp: #{lp}"
+LOG.info "Longest path for 'Tree 3': bf: #{bf} - lp: #{lp}"
 
 dg = RGL::DirectedAdjacencyGraph.new
 source = build_directed_graph(dg, 'tree.txt')
@@ -144,7 +144,7 @@ LOG.info "Longest path for 'Tree': #{lp}"
 dg = RGL::DirectedAdjacencyGraph.new
 source = build_directed_graph(dg, 'tree4.txt')
 lp = longest_path(source, dg)
-LOG.info "Longest path for 'Tree': #{lp}"
+LOG.info "Longest path for 'Tree4': #{lp}"
 
 dg = RGL::DirectedAdjacencyGraph.new
 source = build_directed_graph(dg, 'triangle.txt')

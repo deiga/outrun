@@ -53,8 +53,8 @@ function longest_path(source) {
       });
     }
   });
-  console.log(distance);
-  console.log(-(_.min(distance, function(val) { return val; })));
+  formatted_dist = _.map(distance, function(d,v) {return new Object([v, d]);});
+  console.log((_.min(formatted_dist, function(obj) { return _.last(obj); })));
 }
 
 function safe_get(obj, key) {
