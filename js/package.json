@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/deiga/outrun",
   "dependencies": {
-    "graph": "^0.2.0"
+    "graph": "^0.2.0",
+    "lazy": "^1.0.11",
+    "underscore-node": "^0.1.2"
   }
 }

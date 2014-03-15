@@ -118,36 +118,35 @@ def find_longer_distance_in_neighbours(adjacent_vertices, distance, v)
   end
 end
 
-# dg = RGL::DirectedAdjacencyGraph.new
-# source = build_directed_graph(dg, 'tree1.txt')
-# bf = negative_bellman_ford(dg, source)
-# lp = longest_path(source, dg)
-# LOG.info "Longest path for 'Tree 1': bf: #{bf} - lp: #{lp}"
+dg = RGL::DirectedAdjacencyGraph.new
+source = build_directed_graph(dg, 'tree1.txt')
+bf = negative_bellman_ford(dg, source)
+lp = longest_path(source, dg)
+LOG.info "Longest path for 'Tree 1': bf: #{bf} - lp: #{lp}"
 
-# dg = RGL::DirectedAdjacencyGraph.new
-# source = build_directed_graph(dg, 'tree2.txt')
-# bf = negative_bellman_ford(dg, source)
-# lp = longest_path(source, dg)
-# LOG.info "Longest path for 'Tree 2': bf: #{bf} - lp: #{lp}"
+dg = RGL::DirectedAdjacencyGraph.new
+source = build_directed_graph(dg, 'tree2.txt')
+bf = negative_bellman_ford(dg, source)
+lp = longest_path(source, dg)
+LOG.info "Longest path for 'Tree 2': bf: #{bf} - lp: #{lp}"
 
-# dg = RGL::DirectedAdjacencyGraph.new
-# source = build_directed_graph(dg, 'tree3.txt')
-# bf = negative_bellman_ford(dg, source)
-# lp = longest_path(source, dg)
-# LOG.info "Longest path for 'Tree 4': bf: #{bf} - lp: #{lp}"
+dg = RGL::DirectedAdjacencyGraph.new
+source = build_directed_graph(dg, 'tree3.txt')
+bf = negative_bellman_ford(dg, source)
+lp = longest_path(source, dg)
+LOG.info "Longest path for 'Tree 4': bf: #{bf} - lp: #{lp}"
 
 dg = RGL::DirectedAdjacencyGraph.new
 source = build_directed_graph(dg, 'tree.txt')
-start = Time.now
 lp = longest_path(source, dg)
-finish = Time.now
-LOG.info "Time: #{finish - start}"
 LOG.info "Longest path for 'Tree': #{lp}"
 
-# dg = RGL::DirectedAdjacencyGraph.new
-# source = build_directed_graph(dg, 'triangle.txt')
-# start = Time.now
-# lp = longest_path(source, dg)
-# finish = Time.now
-# LOG.info "Time: #{finish - start}"
-# LOG.info "Longest path for 'Triangle': #{lp}"
+dg = RGL::DirectedAdjacencyGraph.new
+source = build_directed_graph(dg, 'tree4.txt')
+lp = longest_path(source, dg)
+LOG.info "Longest path for 'Tree': #{lp}"
+
+dg = RGL::DirectedAdjacencyGraph.new
+source = build_directed_graph(dg, 'triangle.txt')
+lp = longest_path(source, dg)
+LOG.info "Longest path for 'Triangle': #{lp}"
