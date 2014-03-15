@@ -3,9 +3,6 @@ var Graph = require('graph').Graph;
 var fs = require('fs');
 var lazy = require('lazy');
 
-dg = new Graph();
-
-
 function build_directed_graph(filename, callback) {
   var source;
   var counter = 0;
@@ -62,27 +59,38 @@ function safe_get(obj, key) {
   return typeof val !== 'undefined' ? val : Infinity;
 }
 
-build_directed_graph('../tree1.txt', function(source) {
-  console.log('Tree1');
-  longest_path(source);
-});
-build_directed_graph('../tree2.txt', function(source) {
-  console.log('Tree2');
-  longest_path(source);
-});
-build_directed_graph('../tree3.txt', function(source) {
-  console.log('Tree3');
-  longest_path(source);
-});
+// dg = new Graph();
+// build_directed_graph('../tree1.txt', function(source) {
+//   console.log('Tree1');
+//   longest_path(source);
+// });
+
+// dg = new Graph();
+// build_directed_graph('../tree2.txt', function(source) {
+//   console.log('Tree2');
+//   longest_path(source);
+// });
+
+// dg = new Graph();
+// build_directed_graph('../tree3.txt', function(source) {
+//   console.log('Tree3');
+//   longest_path(source);
+// });
+
+dg = new Graph();
 build_directed_graph('../tree.txt', function(source) {
   console.log('Tree');
   longest_path(source);
 });
-build_directed_graph('../tree4.txt', function(source) {
-  console.log('Tree4');
-  longest_path(source);
-});
-build_directed_graph('../triangle.txt', function(source) {
-  console.log('Triangle');
-  longest_path(source);
-});
+
+// dg = new Graph();
+// build_directed_graph('../tree4.txt', function(source) {
+//   console.log('Tree4');
+//   longest_path(source);
+// });
+
+// dg = new Graph();
+// build_directed_graph('../triangle.txt', function(source) {
+//   console.log('Triangle');
+//   longest_path(source);
+// });
