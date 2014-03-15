@@ -2,7 +2,6 @@ var _ = require('underscore-node');
 var Graph = require('graph').Graph;
 var fs = require('fs');
 var lazy = require('lazy');
-var after = require('after');
 
 dg = new Graph();
 
@@ -54,6 +53,7 @@ function longest_path(source) {
       });
     }
   });
+  console.log(distance);
   console.log(-(_.min(distance, function(val) { return val; })));
 }
 
