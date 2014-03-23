@@ -1,0 +1,13 @@
+#!/bin/bash
+
+case "$1" in
+    "node"|"js" )
+        node js/app.js
+        ;;
+    * )
+        ruby ruby/outrun.rb
+        ;;
+esac
+
+
+
