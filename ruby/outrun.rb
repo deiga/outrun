@@ -118,6 +118,10 @@ def find_longer_distance_in_neighbours(adjacent_vertices, distance, v)
   end
 end
 
+if Dir.pwd.end_with?('outrun/ruby')
+  Dir.chdir '..'
+end
+
 dg = RGL::DirectedAdjacencyGraph.new
 source = build_directed_graph(dg, 'tree1.txt')
 bf = negative_bellman_ford(dg, source)
